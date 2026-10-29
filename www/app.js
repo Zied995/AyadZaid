@@ -232,7 +232,21 @@ function initAudio() {
   }
 }
 
-function playPopSound() {
+// Audio playback system with real audio assets
+function playAudioFile(file) {
+  try {
+    const a = new Audio('assets/audio/' + file);
+    a.play().catch(() => {
+      // Fallback to synthesized audio if needed
+      if (file === 'pop.wav') synthPop();
+      else if (file === 'star.wav') synthSparkle();
+    });
+  } catch (e) {
+    if (file === 'pop.wav') synthPop();
+  }
+}
+
+function synthPop() {
   initAudio();
   if (!audioCtx) return;
   const osc = audioCtx.createOscillator();
@@ -248,10 +262,10 @@ function playPopSound() {
   osc.stop(audioCtx.currentTime + 0.12);
 }
 
-function playSparkleSound() {
+function synthSparkle() {
   initAudio();
   if (!audioCtx) return;
-  const notes = [523.25, 659.25, 783.99, 1046.50]; // C E G C
+  const notes = [523.25, 659.25, 783.99, 1046.50];
   notes.forEach((freq, idx) => {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
@@ -267,9 +281,25 @@ function playSparkleSound() {
   });
 }
 
+function playPopSound() {
+  playAudioFile('pop.wav');
+}
+
+function playSparkleSound() {
+  playAudioFile('star.wav');
+}
+
 function playCheerSound() {
-  playSparkleSound();
+  playAudioFile('cheer.wav');
   launchConfetti();
+}
+
+function playCorrectSound() {
+  playAudioFile('correct.wav');
+}
+
+function playWrongSound() {
+  playAudioFile('wrong.wav');
 }
 
 // Web Speech API for Arabic and English Voice
@@ -784,11 +814,37 @@ function playCurrentAyah() {
 }
 
 function toggleQuranPlayback() {
+  const audio = document.getElementById('quranAudioPlayer');
   if (isQuranPlaying) {
     stopQuranAudio();
   } else {
-    currentAyahIndex = 0;
-    playCurrentAyah();
+    // Play full surah audio from local MP3 asset
+    const surahFiles = {
+      fatiha: 'assets/audio/fatiha.mp3',
+      kawthar: 'assets/audio/kawthar.mp3',
+      ikhlas: 'assets/audio/ikhlas.mp3'
+    };
+
+    const targetSrc = surahFiles[currentSurahKey] || 'assets/audio/fatiha.mp3';
+    audio.src = targetSrc;
+    audio.play().then(() => {
+      isQuranPlaying = true;
+      updateQuranPlayButtonUI(true);
+      // Highlight all verses softly
+      document.querySelectorAll('.ayah-box').forEach(b => b.classList.add('active-playing'));
+    }).catch(() => {
+      // Fallback: Play ayah by ayah
+      currentAyahIndex = 0;
+      playCurrentAyah();
+    });
+
+    audio.onended = () => {
+      isQuranPlaying = false;
+      updateQuranPlayButtonUI(false);
+      playCheerSound();
+      speakText('صدق الله العظيم. بارك الله فيك يا إياد!', 'ar-SA');
+      addKidStars(3);
+    };
   }
 }
 
