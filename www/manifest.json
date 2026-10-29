@@ -1,0 +1,26 @@
+{
+  "name": "تطبيق إياد زيد التعليمي | Ayad Zaid",
+  "short_name": "Ayad Zaid",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#FFF9C4",
+  "theme_color": "#FF6B6B",
+  "orientation": "portrait",
+  "description": "تطبيق أطفال تعليمي تفاعلي لبطلنا إياد زيد مع ميكي ماوس لتعليم الرياضيات، الحروف العربية والإنجليزية، والقرآن الكريم",
+  "lang": "ar",
+  "icons": [
+    {
+      "src": "assets/images/ayad_avatar.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/images/ayad_avatar.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
+

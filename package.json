@@ -1,0 +1,37 @@
+{
+  "name": "ayad-zaid-kids-app",
+  "version": "1.0.0",
+  "description": "تطبيق أطفال تعليمي تفاعلي للأندرويد (APK) والآيفون (IPA) - إياد زيد",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "cap:add:android": "npx @capacitor/cli add android",
+    "cap:add:ios": "npx @capacitor/cli add ios",
+    "cap:sync": "npx @capacitor/cli sync",
+    "cap:open:android": "npx @capacitor/cli open android",
+    "cap:open:ios": "npx @capacitor/cli open ios"
+  },
+  "dependencies": {
+    "@capacitor/core": "^6.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/cli": "^6.0.0",
+    "@capacitor/ios": "^6.0.0"
+  },
+  "keywords": [
+    "educational",
+    "kids",
+    "arabic",
+    "math",
+    "quran",
+    "english",
+    "mickey-mouse",
+    "pwa",
+    "apk",
+    "ipa"
+  ],
+  "author": "Ayad Zaid",
+  "license": "MIT"
+}
+

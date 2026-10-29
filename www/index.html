@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>تطبيق إياد زيد التعليمي | Ayad Zaid Kids App</title>
+  
+  <!-- Web App Manifest for Android & iOS -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#FF6B6B">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Ayad Zaid">
+  <link rel="apple-touch-icon" href="assets/images/ayad_avatar.jpg">
+  <link rel="icon" type="image/jpeg" href="assets/images/ayad_avatar.jpg">
+
+  <!-- Google Fonts for Kids Arabic & English -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Baloo+Bhaijaan+2:wght@500;700;800&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="safe-area">
+
+  <!-- Floating Sparkles & Background Shapes -->
+  <div class="bg-stars" id="bgStars"></div>
+
+  <!-- ============================================== -->
+  <!-- 1. INTRO & LOGIN SCREEN                        -->
+  <!-- ============================================== -->
+  <section id="screen-intro" class="screen active">
+    <div class="intro-container">
+      
+      <!-- Mickey Mouse Animated Greeting Header -->
+      <div class="mickey-welcome-card">
+        <div class="mickey-animated-box" id="introMickey" title="اضغط على ميكي ماوس!">
+          <!-- Animated SVG Mickey Mouse Character -->
+          <div class="mickey-svg-wrapper">
+            <svg viewBox="0 0 200 220" class="mickey-mascot" id="mickeyAvatarSvg">
+              <!-- Shadow -->
+              <ellipse cx="100" cy="205" rx="60" ry="12" fill="rgba(0,0,0,0.15)" />
+              
+              <!-- Yellow Shoes -->
+              <ellipse cx="70" cy="190" rx="26" ry="16" fill="#FBC02D" stroke="#333" stroke-width="3" />
+              <ellipse cx="130" cy="190" rx="26" ry="16" fill="#FBC02D" stroke="#333" stroke-width="3" />
+              
+              <!-- Legs -->
+              <rect x="75" y="160" width="10" height="25" fill="#1A1A1A" rx="5" />
+              <rect x="115" y="160" width="10" height="25" fill="#1A1A1A" rx="5" />
+              
+              <!-- Red Shorts Body -->
+              <ellipse cx="100" cy="155" rx="42" ry="28" fill="#E53935" stroke="#333" stroke-width="3" />
+              <!-- White Buttons on Shorts -->
+              <ellipse cx="88" cy="155" rx="6" ry="10" fill="#FFFFFF" stroke="#333" stroke-width="2" />
+              <ellipse cx="112" cy="155" rx="6" ry="10" fill="#FFFFFF" stroke="#333" stroke-width="2" />
+              
+              <!-- Arms & White Gloves -->
+              <!-- Left Arm (Waving) -->
+              <g class="mickey-arm-wave">
+                <path d="M 65 130 Q 30 110 35 80" stroke="#1A1A1A" stroke-width="12" stroke-linecap="round" fill="none" />
+                <!-- White Glove Left -->
+                <circle cx="35" cy="72" r="16" fill="#FFFFFF" stroke="#333" stroke-width="3" />
+                <circle cx="28" cy="62" r="6" fill="#FFFFFF" stroke="#333" stroke-width="2" />
+                <circle cx="38" cy="58" r="6" fill="#FFFFFF" stroke="#333" stroke-width="2" />
+                <circle cx="48" cy="64" r="6" fill="#FFFFFF" stroke="#333" stroke-width="2" />
+                <!-- 3 black dart lines on glove -->
+                <line x1="31" y1="72" x2="31" y2="78" stroke="#333" stroke-width="2" stroke-linecap="round" />
+                <line x1="36" y1="71" x2="36" y2="79" stroke="#333" stroke-width="2" stroke-linecap="round" />
+                <line x1="41" y1="72" x2="41" y2="78" stroke="#333" stroke-width="2" stroke-linecap="round" />
+              </g>
+              
+              <!-- Right Arm -->
+              <path d="M 135 130 Q 165 140 160 160" stroke="#1A1A1A" stroke-width="12" stroke-linecap="round" fill="none" />
+              <circle cx="160" cy="165" r="14" fill="#FFFFFF" stroke="#333" stroke-width="3" />
+
+              <!-- Big Round Mickey Ears -->
+              <circle cx="50" cy="55" r="34" fill="#1A1A1A" />
+              <circle cx="150" cy="55" r="34" fill="#1A1A1A" />
+              
+              <!-- Black Head -->
+              <circle cx="100" cy="95" r="46" fill="#1A1A1A" />
+              
+              <!-- Peach Face Area -->
+              <ellipse cx="100" cy="102" rx="36" ry="32" fill="#FFE0B2" />
+              <ellipse cx="86" cy="85" rx="14" ry="18" fill="#FFE0B2" />
+              <ellipse cx="114" cy="85" rx="14" ry="18" fill="#FFE0B2" />
+              
+              <!-- Eyes with Sparkle -->
+              <ellipse cx="90" cy="85" rx="7" ry="14" fill="#FFFFFF" stroke="#222" stroke-width="1.5" />
+              <ellipse cx="110" cy="85" rx="7" ry="14" fill="#FFFFFF" stroke="#222" stroke-width="1.5" />
+              <ellipse cx="91" cy="87" rx="4" ry="9" fill="#1A1A1A" />
+              <ellipse cx="109" cy="87" rx="4" ry="9" fill="#1A1A1A" />
+              <circle cx="89" cy="83" r="2" fill="#FFFFFF" />
+              <circle cx="107" cy="83" r="2" fill="#FFFFFF" />
+
+              <!-- Cute Black Oval Nose -->
+              <ellipse cx="100" cy="103" rx="10" ry="7" fill="#1A1A1A" />
+              <ellipse cx="98" cy="101" rx="3" ry="2" fill="#FFFFFF" />
+              
+              <!-- Joyful Smiling Mouth -->
+              <path d="M 78 112 Q 100 138 122 112" stroke="#1A1A1A" stroke-width="3.5" fill="none" stroke-linecap="round" />
+              <path d="M 83 115 Q 100 138 117 115 Z" fill="#D32F2F" />
+              <!-- Tongue -->
+              <path d="M 92 124 Q 100 120 108 124 Q 100 135 92 124 Z" fill="#FF8A80" />
+              <!-- Smile dimples -->
+              <path d="M 75 110 Q 77 114 78 116" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round" fill="none" />
+              <path d="M 125 110 Q 123 114 122 116" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round" fill="none" />
+            </svg>
+          </div>
+          
+          <div class="mickey-speech-bubble" id="mickeySpeech">
+            <span class="sparkle-icon">✨</span>
+            <div class="speech-animated-text">
+              <span class="animated-greeting">مَرْحَباً بِكَ يَا إِيَادْ !</span>
+              <p class="sub-greeting">أنا ميكي ماوس، هيا نلعب ونتعلم معاً يا بطل!</p>
+            </div>
+            <button class="btn-sound-mickey" id="btnSpeakGreeting" title="استمع إلى ميكي">🔊 استمع لميكي</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Card with Ayad's 3D Pixar Cartoon Character -->
+      <div class="login-card-glass">
+        
+        <div class="hero-character-preview">
+          <div class="avatar-ring pulse">
+            <img src="assets/images/ayad_waving.jpg" alt="بطل التطبيق إياد زيد" id="heroAvatarImg" class="hero-avatar-photo" onerror="this.src='assets/images/ayad_thumbsup.jpg'">
+            <span class="badge-superstar">⭐ البطل الصغير</span>
+          </div>
+          <h1 class="app-title-bounce">
+            <span class="letter-b">تَطْبِيقْ</span>
+            <span class="letter-g">إِيَادْ</span>
+            <span class="letter-p">زَيْدْ</span>
+          </h1>
+          <p class="app-tagline">العالم السحري للتعلم والمرح للأذكياء 🎨</p>
+        </div>
+
+        <!-- Registration & Login Form -->
+        <form id="form-login" class="kid-form" onsubmit="event.preventDefault(); handleKidLogin();">
+          <div class="form-group">
+            <label for="inputName">
+              <span class="input-icon">👦</span> اسم البطل:
+            </label>
+            <input type="text" id="inputName" class="kid-input" value="إياد زيد" placeholder="اكتب اسمك هنا يا بطل..." required>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="inputAge">
+                <span class="input-icon">🎂</span> العمر:
+              </label>
+              <select id="inputAge" class="kid-input select-age">
+                <option value="3">3 سنوات</option>
+                <option value="4">4 سنوات</option>
+                <option value="5">5 سنوات</option>
+                <option value="6" selected>6 سنوات</option>
+                <option value="7">7 سنوات</option>
+                <option value="8">8 سنوات</option>
+                <option value="9">9 سنوات</option>
+                <option value="10">10 سنوات</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="inputPassword">
+                <span class="input-icon">🔑</span> كلمة السر / الرمز:
+              </label>
+              <input type="password" id="inputPassword" class="kid-input" value="1234" placeholder="رمزك السري" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="inputSchool">
+              <span class="input-icon">🏫</span> اسم الروضة أو المدرسة:
+            </label>
+            <input type="text" id="inputSchool" class="kid-input" value="روضة ومدرسة الأبطال" placeholder="اسم مدرستك أو روضتك..." required>
+          </div>
+
+          <button type="submit" class="btn-start-adventure" id="btnEnterApp">
+            <span class="rocket-anim">🚀</span>
+            <span>دخول إلى عالم إياد زيد السحري</span>
+            <span class="star-burst">⭐</span>
+          </button>
+        </form>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================== -->
+  <!-- 2. MAIN APP DASHBOARD                          -->
+  <!-- ============================================== -->
+  <section id="screen-dashboard" class="screen">
+    
+    <!-- Top Navigation & Child Profile Bar -->
+    <header class="app-header">
+      <div class="user-pill" id="btnOpenProfile" title="تعديل الحساب">
+        <img src="assets/images/ayad_avatar.jpg" alt="إياد" class="user-avatar-sm" onerror="this.src='assets/images/ayad_waving.jpg'">
+        <div class="user-info-text">
+          <div class="user-name" id="displayKidName">إياد زيد</div>
+          <div class="user-school" id="displayKidSchool">روضة ومدرسة الأبطال</div>
+        </div>
+        <span class="user-age-badge" id="displayKidAge">6 سنين</span>
+      </div>
+
+      <div class="header-actions">
+        <!-- Floating Interactive Mickey Mascot Button -->
+        <button class="btn-mickey-helper" id="btnMickeyCompanion" title="تحدث مع ميكي ماوس">
+          <span class="mickey-icon-face">🐭</span>
+          <span class="mickey-talk-hint">ميكي هنا!</span>
+        </button>
+
+        <!-- Stars Counter -->
+        <div class="stars-counter" title="النجوم التي جمعتها">
+          <span class="star-icon-anim">⭐</span>
+          <span id="starsCount">45</span>
+        </div>
+
+        <!-- Remaining Screen Time Badge -->
+        <div class="timer-badge" id="timerBadgeDisplay" title="الوقت المتبقي لليوم">
+          <span class="timer-icon">⏳</span>
+          <span id="timerCountdown">30:00</span>
+        </div>
+
+        <!-- Parental Control Gate Button -->
+        <button class="btn-parent-gate" id="btnOpenParentalControl" title="مراقبة الأهل والمؤقت">
+          <span>👨‍👩‍👧‍👦</span>
+          <span class="label-parent">الأهل</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Categories / Play Areas Grid -->
+    <main class="dashboard-content">
+      
+      <!-- Welcome Ribbon -->
+      <div class="welcome-banner">
+        <div class="banner-text">
+          <h2>مرحباً يا بطلنا <span class="highlight-name" id="bannerKidName">إياد</span>! 🎈</h2>
+          <p>ماذا تحب أن نتعلم ونلعب اليوم مع ميكي ماوس؟</p>
+        </div>
+        <div class="banner-mascots">
+          <img src="assets/images/ayad_thumbsup.jpg" alt="إياد يشجعك" class="banner-hero-img" onerror="this.src='assets/images/ayad_waving.jpg'">
+        </div>
+      </div>
+
+      <!-- 4 Core Hub Cards -->
+      <div class="categories-grid">
+        
+        <!-- Card 1: الرياضيات والأرقام -->
+        <div class="cat-card cat-math" onclick="openSection('math')">
+          <div class="cat-card-bg-circle"></div>
+          <div class="cat-badge">1️⃣ 2️⃣ 3️⃣</div>
+          <div class="cat-illustration">🔢</div>
+          <h3 class="cat-title">مملكة الرياضيات</h3>
+          <p class="cat-desc">الأرقام من 1 إلى 10، ومن 10 إلى 20، وألعاب العد الذكية!</p>
+          <div class="cat-action">
+            <span>العب وتعلم</span>
+            <span class="arrow">⬅️</span>
+          </div>
+        </div>
+
+        <!-- Card 2: لغتي العربية -->
+        <div class="cat-card cat-arabic" onclick="openSection('arabic')">
+          <div class="cat-card-bg-circle"></div>
+          <div class="cat-badge">أ ب ت</div>
+          <div class="cat-illustration">🦁 🍎</div>
+          <h3 class="cat-title">حروف لغتي العربية</h3>
+          <p class="cat-desc">كل حرف مع حيوان أو نبات جميل بصوت ونطق رائع!</p>
+          <div class="cat-action">
+            <span>اكتشف الحروف</span>
+            <span class="arrow">⬅️</span>
+          </div>
+        </div>
+
+        <!-- Card 3: روضة القرآن الكريم -->
+        <div class="cat-card cat-quran" onclick="openSection('quran')">
+          <div class="cat-card-bg-circle"></div>
+          <div class="cat-badge">📖 نور وهداية</div>
+          <div class="cat-illustration">🕌 🌙</div>
+          <h3 class="cat-title">القرآن الكريم للأطفال</h3>
+          <p class="cat-desc">سورة الفاتحة (الحمد)، سورة الكوثر، وسورة الإخلاص مع تلاوة عذبة!</p>
+          <div class="cat-action">
+            <span>استمع واحفظ</span>
+            <span class="arrow">⬅️</span>
+          </div>
+        </div>
+
+        <!-- Card 4: اللغة الإنجليزية وفرقعة الفقاعات -->
+        <div class="cat-card cat-english" onclick="openSection('english')">
+          <div class="cat-card-bg-circle"></div>
+          <div class="cat-badge">A B C & 1 2 3</div>
+          <div class="cat-illustration">🎈 🫧</div>
+          <h3 class="cat-title">الإنجليزية والفقاعات</h3>
+          <p class="cat-desc">الحروف، الأرقام الملونة، ولعبة فرقعة الفقاعات الممتعة!</p>
+          <div class="cat-action">
+            <span>فرقع الفقاعات</span>
+            <span class="arrow">⬅️</span>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+
+  </section>
+
+
+  <!-- ============================================== -->
+  <!-- 3. SECTION: MATHEMATICS (رياضيات)              -->
+  <!-- ============================================== -->
+  <section id="screen-math" class="screen">
+    <div class="sub-header">
+      <button class="btn-back" onclick="goToDashboard()">➡️ رجوع للرئيسية</button>
+      <h2>🔢 مملكة الرياضيات والأرقام</h2>
+      <div class="stars-counter-mini">⭐ <span id="mathStars">0</span></div>
+    </div>
+
+    <!-- Math Tabs -->
+    <div class="tab-buttons">
+      <button class="tab-btn active" onclick="switchMathTab('tab-1-10')">الأرقام 1 إلى 10</button>
+      <button class="tab-btn" onclick="switchMathTab('tab-10-20')">الأرقام 10 إلى 20</button>
+      <button class="tab-btn" onclick="switchMathTab('tab-counting-game')">🎮 لعبة عدّ الأشياء</button>
+      <button class="tab-btn" onclick="switchMathTab('tab-addition-game')">➕ تحدي الجمع السهل</button>
+    </div>
+
+    <div class="tab-content-area">
+      <!-- Tab 1: Numbers 1 to 10 -->
+      <div id="tab-1-10" class="math-tab active">
+        <p class="section-instruction">اضغط على أي رقم لتسمع صوته وتعد الأشكال اللطيفة! 🌟</p>
+        <div class="numbers-grid" id="gridNumbers1to10"></div>
+      </div>
+
+      <!-- Tab 2: Numbers 10 to 20 -->
+      <div id="tab-10-20" class="math-tab">
+        <p class="section-instruction">مرحى يا إياد! هيا نتعلم الأرقام الكبيرة من 10 إلى 20 🚀</p>
+        <div class="numbers-grid" id="gridNumbers10to20"></div>
+      </div>
+
+      <!-- Tab 3: Counting Mini-Game -->
+      <div id="tab-counting-game" class="math-tab">
+        <div class="game-box">
+          <div class="game-mascot-tip">
+            <span class="mickey-badge-sm">🐭 ميكي يسألك:</span>
+            <p>كم شكلاً ترى في الصندوق يا بطل إياد؟ عُدّها واختر الرقم الصحيح!</p>
+          </div>
+          <div class="counting-stage" id="countingStage"></div>
+          <div class="counting-options" id="countingOptions"></div>
+          <div class="game-feedback" id="countingFeedback"></div>
+        </div>
+      </div>
+
+      <!-- Tab 4: Addition Challenge -->
+      <div id="tab-addition-game" class="math-tab">
+        <div class="game-box">
+          <div class="game-mascot-tip">
+            <span class="mickey-badge-sm">🐭 ميكي يتحدّاك:</span>
+            <p>اجمع الأشياء معاً واختر الإجابة الصحيحة لتكسب نجمة جديدة! ⭐</p>
+          </div>
+          <div class="addition-stage" id="additionStage"></div>
+          <div class="counting-options" id="additionOptions"></div>
+          <div class="game-feedback" id="additionFeedback"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================== -->
+  <!-- 4. SECTION: ARABIC ALPHABET (لغتي العربية)    -->
+  <!-- ============================================== -->
+  <section id="screen-arabic" class="screen">
+    <div class="sub-header">
+      <button class="btn-back" onclick="goToDashboard()">➡️ رجوع للرئيسية</button>
+      <h2>🔤 حروف لغتي العربية الجميلة</h2>
+      <div class="alphabet-filter">
+        <button class="filter-chip active" onclick="filterArabic('all')">كل الحروف (28)</button>
+        <button class="filter-chip" onclick="filterArabic('animals')">🐾 الحيوانات</button>
+        <button class="filter-chip" onclick="filterArabic('plants')">🌿 النباتات والفواكه</button>
+      </div>
+    </div>
+
+    <div class="arabic-letters-container">
+      <p class="section-instruction">اضغط على الحرف لتشاهده بصوت نقي مع صورة الحيوان أو النبات المرتبط به! 🎨</p>
+      <div class="letters-grid" id="arabicLettersGrid"></div>
+    </div>
+
+    <!-- Letter Detail Modal / Card -->
+    <div class="modal-overlay" id="letterModal" onclick="closeLetterModal(event)">
+      <div class="letter-modal-card" onclick="event.stopPropagation()">
+        <button class="modal-close-btn" onclick="closeLetterModal()">&times;</button>
+        <div class="modal-letter-huge" id="modalLetterChar">أ</div>
+        <div class="modal-item-display">
+          <span class="modal-item-emoji" id="modalItemEmoji">🦁</span>
+          <h3 class="modal-item-name" id="modalItemWord">أَسَدٌ</h3>
+          <span class="modal-item-type" id="modalItemType">حيوان شجاع</span>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-voice-large" id="btnModalPronounce" onclick="pronounceCurrentArabicLetter()">
+            <span>🔊 استمع للنطق</span>
+          </button>
+          <button class="btn-voice-large btn-plant-alt" id="btnModalShowAlt" onclick="toggleLetterAlt()">
+            <span id="btnModalAltText">🌱 اعرض النبات: أرز</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================== -->
+  <!-- 5. SECTION: HOLY QURAN (القرآن الكريم للأطفال)  -->
+  <!-- ============================================== -->
+  <section id="screen-quran" class="screen">
+    <div class="sub-header">
+      <button class="btn-back" onclick="goToDashboard()">➡️ رجوع للرئيسية</button>
+      <h2>📖 روضة القرآن الكريم المباركة</h2>
+      <div class="quran-status-badge">✨ نور وبركة</div>
+    </div>
+
+    <!-- Surah Selectors -->
+    <div class="surah-tabs">
+      <button class="surah-tab-btn active" onclick="switchSurah('fatiha')">
+        <span class="tab-surah-icon">🕌</span>
+        <span>سورة الفاتحة (الحمد)</span>
+        <small>7 آيات</small>
+      </button>
+      <button class="surah-tab-btn" onclick="switchSurah('kawthar')">
+        <span class="tab-surah-icon">🌊</span>
+        <span>سورة الكوثر</span>
+        <small>3 آيات</small>
+      </button>
+      <button class="surah-tab-btn" onclick="switchSurah('ikhlas')">
+        <span class="tab-surah-icon">⭐</span>
+        <span>سورة الإخلاص</span>
+        <small>4 آيات</small>
+      </button>
+    </div>
+
+    <!-- Quran Reader Display -->
+    <div class="mushaf-container">
+      
+      <div class="mushaf-card">
+        <div class="mushaf-bismillah">
+          بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+        </div>
+
+        <div class="surah-header-badge">
+          <h3 id="surahTitleDisplay">سُورَةُ الفَاتِحَة</h3>
+          <span id="surahInfoBadge">مَكِّيَّة - سَبْعُ آيَاتٍ</span>
+        </div>
+
+        <!-- Verses Container -->
+        <div class="verses-list" id="versesListContainer"></div>
+
+        <!-- Audio Player Controls for Kids -->
+        <div class="quran-controls-panel">
+          <div class="reciter-info">
+            <span class="audio-wave-anim" id="audioWaveAnim"><span></span><span></span><span></span><span></span></span>
+            <span id="reciterNameLabel">🎙️ بصوت الشيخ مشاري العفاسي (تلاوة تعليمية عذبة)</span>
+          </div>
+          
+          <div class="playback-buttons">
+            <button class="btn-quran-ctrl" onclick="playPrevAyah()" title="الآية السابقة">⏮️ السابقة</button>
+            <button class="btn-quran-play" id="btnQuranPlayPause" onclick="toggleQuranPlayback()">
+              <span id="quranPlayIcon">▶️</span>
+              <span id="quranPlayText">تشغيل السورة كاملة</span>
+            </button>
+            <button class="btn-quran-ctrl" onclick="playNextAyah()" title="الآية التالية">التالية ⏭️</button>
+            <button class="btn-quran-ctrl btn-repeat" id="btnRepeatAyah" onclick="toggleAyahRepeat()" title="تكرار الآية للحفظ">🔁 تكرار</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================== -->
+  <!-- 6. SECTION: ENGLISH & BUBBLES (الإنجليزية)     -->
+  <!-- ============================================== -->
+  <section id="screen-english" class="screen">
+    <div class="sub-header">
+      <button class="btn-back" onclick="goToDashboard()">➡️ رجوع للرئيسية</button>
+      <h2>🎈 English Fun & Bubbles Pop</h2>
+      <div class="stars-counter-mini">🫧 Score: <span id="bubbleScore">0</span></div>
+    </div>
+
+    <div class="tab-buttons">
+      <button class="tab-btn active" onclick="switchEnglishTab('tab-bubbles')">🫧 لعبة فرقعة الفقاعات</button>
+      <button class="tab-btn" onclick="switchEnglishTab('tab-en-abc')">🔤 English Letters (A-Z)</button>
+      <button class="tab-btn" onclick="switchEnglishTab('tab-en-123')">🔢 Numbers (1 to 20)</button>
+    </div>
+
+    <div class="tab-content-area">
+      
+      <!-- English Tab 1: Interactive Bubble Popping Game -->
+      <div id="tab-bubbles" class="english-tab active">
+        <div class="bubbles-arena-wrapper">
+          <div class="bubble-header-info">
+            <div class="bubble-mission">
+              <span class="mickey-badge-sm">🐭 Mickey says:</span>
+              <span>Pop the floating bubbles and listen to the magic sounds! 🎈</span>
+            </div>
+            <button class="btn-rainbow" onclick="spawnBonusBubbles()">🌟 إطلاق فقاعات سحرية!</button>
+          </div>
+          
+          <!-- Canvas for real floating physics bubbles -->
+          <div class="bubble-canvas-container" id="bubbleArena">
+            <!-- Floating bubbles will spawn here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- English Tab 2: Alphabet Cards -->
+      <div id="tab-en-abc" class="english-tab">
+        <p class="section-instruction">Click any letter to hear its phonics sound and cute word! 🎨</p>
+        <div class="letters-grid en-grid" id="englishLettersGrid"></div>
+      </div>
+
+      <!-- English Tab 3: Numbers 1 to 20 -->
+      <div id="tab-en-123" class="english-tab">
+        <p class="section-instruction">Learn numbers in English with colorful cards and sounds! 🚀</p>
+        <div class="numbers-grid en-num-grid" id="englishNumbersGrid"></div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================== -->
+  <!-- 7. SECTION: PARENTAL CONTROL & SCREEN TIMER    -->
+  <!-- ============================================== -->
+  <section id="screen-parental" class="screen">
+    <div class="sub-header">
+      <button class="btn-back" onclick="goToDashboard()">➡️ عودة للتطبيق</button>
+      <h2>👨‍👩‍👧‍👦 لوحة تحكم ومراقبة الأهل</h2>
+      <div>🔒 منطقة محمية</div>
+    </div>
+
+    <!-- Parental Gate Security Verification Modal/Box -->
+    <div id="parentalGateBox" class="parental-gate-card">
+      <div class="gate-lock-icon">🔐</div>
+      <h3>سؤال الأمان لحماية الأطفال</h3>
+      <p>عزيزي ولي الأمر، يُرجى حل هذه المسألة البسيطة للتأكد من هويتك:</p>
+      
+      <div class="math-challenge-box">
+        <span id="gateNum1">7</span>
+        <span>+</span>
+        <span id="gateNum2">5</span>
+        <span>=</span>
+        <input type="number" id="gateAnswerInput" class="gate-input" placeholder="؟">
+      </div>
+
+      <div class="gate-actions">
+        <button class="btn-gate-verify" onclick="verifyParentalGate()">تأكيد ودخول الأهل</button>
+        <button class="btn-gate-cancel" onclick="goToDashboard()">إلغاء والعودة</button>
+      </div>
+      <p class="gate-tip">الرمز الافتراضي الاحتياطي: <code>4321</code></p>
+    </div>
+
+    <!-- Protected Parental Control Dashboard (shown after gate passed) -->
+    <div id="parentalDashboard" class="parental-dashboard" style="display: none;">
+      
+      <!-- Timer Settings Card -->
+      <div class="parent-setting-card">
+        <div class="card-title-row">
+          <span class="card-icon">⏱️</span>
+          <div>
+            <h3>مؤقت الإيقاف الذاتي (Auto-Shutdown Screen Time)</h3>
+            <p>يساعد على تنظيم وقت الشاشة لطفلك وحماية عينيه من الإرهاق</p>
+          </div>
+        </div>
+
+        <div class="timer-config-box">
+          <div class="status-toggle">
+            <label class="switch">
+              <input type="checkbox" id="timerToggleSwitch" checked onchange="toggleAutoTimerSwitch()">
+              <span class="slider round"></span>
+            </label>
+            <span id="timerStatusLabel" class="bold-text">المؤقت مفعّل حالياً 🟢</span>
+          </div>
+
+          <div class="time-presets">
+            <button class="time-chip" onclick="setTimeLimit(10)">10 دقائق</button>
+            <button class="time-chip" onclick="setTimeLimit(15)">15 دقيقة</button>
+            <button class="time-chip active" onclick="setTimeLimit(30)">30 دقيقة</button>
+            <button class="time-chip" onclick="setTimeLimit(45)">45 دقيقة</button>
+            <button class="time-chip" onclick="setTimeLimit(60)">60 دقيقة (ساعة)</button>
+            <button class="time-chip" onclick="setTimeLimit(0)">غير محدود</button>
+          </div>
+
+          <div class="timer-live-readout">
+            <span>الوقت المتبقي للجلسة الحالية:</span>
+            <span class="live-clock" id="parentLiveCountdown">30:00 دقيقة</span>
+            <button class="btn-reset-timer" onclick="resetCurrentSessionTimer()">🔄 إعادة تصفير المؤقت الآن</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ayad's Learning Progress & Activity -->
+      <div class="parent-setting-card">
+        <div class="card-title-row">
+          <span class="card-icon">📊</span>
+          <div>
+            <h3>تقرير إنجازات وتعلّم البطل إياد</h3>
+            <p>متابعة تفاعلية لمدى تقدم إياد في الرياضيات والحروف والقرآن</p>
+          </div>
+        </div>
+
+        <div class="stats-summary-grid">
+          <div class="stat-box">
+            <span class="stat-num" id="statStarsCount">45</span>
+            <span class="stat-label">⭐ نجمة تفوق</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num" id="statArabicLetters">28 / 28</span>
+            <span class="stat-label">🔤 حروف عربية</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num" id="statMathScore">100%</span>
+            <span class="stat-label">🔢 دقة الحساب</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num" id="statSurahsList">3 سور</span>
+            <span class="stat-label">📖 سور قرآنية</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Child Profile Management -->
+      <div class="parent-setting-card">
+        <div class="card-title-row">
+          <span class="card-icon">✏️</span>
+          <div>
+            <h3>بيانات الحساب والروضة</h3>
+            <p>تعديل اسم إياد أو روضته أو رمزه السري</p>
+          </div>
+        </div>
+
+        <div class="profile-edit-grid">
+          <div class="edit-field">
+            <label>اسم الطفل:</label>
+            <input type="text" id="parentEditName" class="kid-input" value="إياد زيد">
+          </div>
+          <div class="edit-field">
+            <label>اسم الروضة أو المدرسة:</label>
+            <input type="text" id="parentEditSchool" class="kid-input" value="روضة ومدرسة الأبطال">
+          </div>
+          <div class="edit-field">
+            <label>العمر:</label>
+            <input type="number" id="parentEditAge" class="kid-input" value="6" min="3" max="12">
+          </div>
+          <div class="edit-field">
+            <label>رمز الدخول السري:</label>
+            <input type="text" id="parentEditPass" class="kid-input" value="1234">
+          </div>
+        </div>
+        <button class="btn-save-parent" onclick="saveParentProfileChanges()">💾 حفظ التعديلات</button>
+      </div>
+
+      <!-- Native Mobile App Export / Packaging Info -->
+      <div class="parent-setting-card">
+        <div class="card-title-row">
+          <span class="card-icon">📱</span>
+          <div>
+            <h3>تثبيت التطبيق على الآيفون (iOS) والأندرويد (Android)</h3>
+            <p>تثبيت التطبيق كـ تطبيق كامل بدون متصفح وتصدير ملفات APK و IPA</p>
+          </div>
+        </div>
+
+        <div class="install-guide-box">
+          <div class="platform-install-card">
+            <h4>🍏 لأجهزة الآيفون والآيباد (iPhone & iPad - iOS):</h4>
+            <ol>
+              <li>افتح هذا الرابط في متصفح <b>Safari</b>.</li>
+              <li>اضغط على زر المشاركة <b>Share (مربع بسهم لأعلى)</b> بالأسفل.</li>
+              <li>اختر <b>"إضافة إلى الشاشة الرئيسية" (Add to Home Screen)</b>.</li>
+              <li>سيظهر أيقونة التطبيق باسم <b>Ayad Zaid</b> وصورة إياد كارتوني كتطبيق كامل بدون شريط المتصفح!</li>
+            </ol>
+          </div>
+
+          <div class="platform-install-card">
+            <h4>🤖 لأجهزة الأندرويد (Android APK):</h4>
+            <ol>
+              <li>افتح الرابط في متصفح <b>Google Chrome</b>.</li>
+              <li>اضغط على القائمة (الثلاث نقاط) بالأعلى، ثم اختر <b>"تثبيت التطبيق" (Install App)</b>.</li>
+              <li>يتم تثبيت التطبيق فوراً كـ APK كامل يعمل دون إنترنت ويظهر في قائمة التطبيقات!</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ============================================== -->
+  <!-- 8. FULLSCREEN AUTO-LOCK SLEEP SCREEN OVERLAY   -->
+  <!-- ============================================== -->
+  <div id="sleepLockOverlay" class="sleep-overlay" style="display: none;">
+    <div class="sleep-card">
+      <div class="moon-sleep-anim">🌙 💤</div>
+      <div class="sleep-mascots-row">
+        <!-- Cute Sleeping Mickey & Ayad Mascot -->
+        <img src="assets/images/ayad_thumbsup.jpg" alt="إياد نائم" class="sleep-hero-avatar" onerror="this.src='assets/images/ayad_waving.jpg'">
+      </div>
+      <h2>حان وقت الراحة والنوم يا بطل إياد! 🌟</h2>
+      <p class="sleep-msg">لقد استمتعنا وتعلمنا كثيراً اليوم مع ميكي ماوس والأصدقاء. حان الآن وقت إراحة عينيك والنوم أو القيام بنشاط آخر! ❤️</p>
+      
+      <div class="parent-unlock-area">
+        <p>مخصص للأهل فقط لإلغاء القفل:</p>
+        <div class="unlock-form">
+          <input type="password" id="sleepUnlockCode" placeholder="أدخل رمز الأهل (4321)" class="unlock-input">
+          <button class="btn-unlock" onclick="unlockSleepScreen()">فتح القفل 🔓</button>
+        </div>
+        <p class="unlock-error" id="unlockErrorMsg"></p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ============================================== -->
+  <!-- 9. MICKEY MOUSE INTERACTIVE DIALOG OVERLAY     -->
+  <!-- ============================================== -->
+  <div id="mickeyDialogModal" class="mickey-dialog-overlay" onclick="closeMickeyDialog()">
+    <div class="mickey-dialog-bubble" onclick="event.stopPropagation()">
+      <div class="mickey-dialog-header">
+        <div class="mickey-dialog-avatar">🐭</div>
+        <div class="mickey-dialog-title">
+          <h4>ميكي ماوس</h4>
+          <span>صديقك المفضل</span>
+        </div>
+        <button class="mickey-dialog-close" onclick="closeMickeyDialog()">&times;</button>
+      </div>
+
+      <p class="mickey-dialog-text" id="mickeyDynamicSpeech">
+        "أهلاً بك يا إياد! أنا سعيد جداً بوجودك معي اليوم. هل تعلم أنك أذكى وأشجع بطل في مدرستك؟ استمر في جمع النجوم! ⭐"
+      </p>
+
+      <div class="mickey-dialog-actions">
+        <button class="btn-mickey-action" onclick="mickeyTellEncouragement()">🌟 كلمة تشجيعية</button>
+        <button class="btn-mickey-action" onclick="mickeyTellJoke()">😄 نكتة للأطفال</button>
+        <button class="btn-mickey-action" onclick="mickeyClap()">👏 تصفيق واحتفال</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Floating Sound FX & Voice Synthesis Audio Elements -->
+  <audio id="audioEffect" preload="auto"></audio>
+  <audio id="quranAudioPlayer" preload="auto"></audio>
+
+  <!-- Confetti Canvas for Celebrations -->
+  <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+
+  <script src="app.js"></script>
+</body>
+</html>

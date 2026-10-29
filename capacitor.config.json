@@ -1,0 +1,8 @@
+{
+  "appId": "com.ayadzaid.kidsapp",
+  "appName": "Ayad Zaid",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}
