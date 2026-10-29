@@ -29,3 +29,4 @@
 1. افتح التطبيق في المتصفح.
 2. على **iPhone (Safari)**: اضغط Share 📤 ⬅️ "إضافة إلى الشاشة الرئيسية" (Add to Home Screen).
 3. على **Android (Chrome)**: اضغط ⋮ ⬅️ "تثبيت التطبيق" (Install App).
+

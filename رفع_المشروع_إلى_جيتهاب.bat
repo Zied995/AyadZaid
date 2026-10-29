@@ -7,30 +7,23 @@ echo   🚀 رفع تطبيق إياد زيد التعليمي إلى GitHub �
 echo ========================================================
 echo.
 
-set GIT_EXE="C:\Users\Zied\AppData\Local\Programs\MinGit\cmd\git.exe"
+set PATH=C:\Program Files\GitHub CLI;C:\Users\Zied\AppData\Local\Programs\MinGit\cmd;%PATH%
 
-echo تم تجهيز وضغط جميع ملفات التطبيق (أندرويد + آيفون + الويب + مسارات البناء التلقائي).
-echo.
-echo الرجاء إنشاء مستودع جديد على حسابك في GitHub من الرابط:
-echo https://github.com/new
-echo.
-echo بعد إنشاء المستودع، انسخ الرابط الخاص به، مثل:
-echo https://github.com/YOUR_USERNAME/AyadZaid.git
-echo.
-set /p REPO_URL="الصق رابط مستودع GitHub هنا واضغط Enter: "
-
-if "%REPO_URL%"=="" (
-    echo لم يتم إدخال رابط! تم الإلغاء.
-    pause
-    exit /b
+echo 1. التحقق من تسجيل الدخول إلى GitHub...
+gh auth status >nul 2>&1
+if errorlevel 1 (
+    echo جاري فتح صفحة تسجيل الدخول في المتصفح...
+    gh auth login --web -h github.com -p https
 )
 
 echo.
-echo جاري ربط المستودع ورفع الملفات...
-%GIT_EXE% remote remove origin 2>nul
-%GIT_EXE% remote add origin %REPO_URL%
-%GIT_EXE% branch -M main
-%GIT_EXE% push -u origin main
+echo 2. جاري رفع التطبيق بالكامل إلى مستودعك:
+echo    https://github.com/Zied995/AyadZaid.git
+echo.
+git remote remove origin 2>nul
+git remote add origin https://github.com/Zied995/AyadZaid.git
+git branch -M main
+git push -u origin main
 
 echo.
 echo ========================================================
