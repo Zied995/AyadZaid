@@ -8,7 +8,7 @@ on:
 jobs:
   build-ios:
     name: Build iOS IPA Package
-    runs-on: macos-14
+    runs-on: macos-latest
 
     steps:
       - name: Checkout Code
@@ -23,9 +23,6 @@ jobs:
         run: |
           npm install
           npx cap sync ios
-
-      - name: Select Xcode Version
-        run: sudo xcode-select -s /Applications/Xcode_15.4.app
 
       - name: Build and Archive iOS App
         run: |
@@ -52,4 +49,3 @@ jobs:
         with:
           name: AyadZaid-iOS-IPA
           path: ios/App/build/AyadZaid.ipa
-
