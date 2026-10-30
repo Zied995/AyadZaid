@@ -12,7 +12,8 @@
     "cap:open:ios": "npx @capacitor/cli open ios"
   },
   "dependencies": {
-    "@capacitor/core": "^6.0.0"
+    "@capacitor/core": "^6.0.0",
+    "ws": "^8.22.0"
   },
   "devDependencies": {
     "@capacitor/android": "^6.0.0",
@@ -34,4 +35,3 @@
   "author": "Ayad Zaid",
   "license": "MIT"
 }
-

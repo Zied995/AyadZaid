@@ -602,6 +602,150 @@
         </div>
       </div>
 
+      <!-- Voice & Sound Customization Card (تعديل وتخصيص الأصوات - صوت بنت للأطفال) -->
+      <div class="parent-setting-card">
+        <div class="card-title-row">
+          <span class="card-icon">🎙️</span>
+          <div>
+            <h3>تخصيص الأصوات ونمط المتحدث (صوت بنت حقيقية للأطفال)</h3>
+            <p>اختيار شخصية الصوت، التحكم في النبرة والسرعة، أو تسجيل رسالة ترحيبية بصوتك</p>
+          </div>
+        </div>
+
+        <div class="voice-config-box">
+          <!-- Voice Personality Selection -->
+          <div class="voice-personality-selector">
+            <label class="setting-sub-label">اختر شخصية الصوت المعلمة في التطبيق:</label>
+            <div class="voice-chips-grid">
+              <button type="button" class="voice-chip active" id="chipVoiceGirl" onclick="selectVoiceMode('girl')">
+                <span class="chip-avatar">👧</span>
+                <div class="chip-content">
+                  <strong>صوت بنت لطيفة وحقيقية</strong>
+                  <small>نبرة بناتي طبيعية، هادئة ومحببة جداً للأطفال</small>
+                </div>
+              </button>
+
+              <button type="button" class="voice-chip" id="chipVoiceMickey" onclick="selectVoiceMode('mickey')">
+                <span class="chip-avatar">🐭</span>
+                <div class="chip-content">
+                  <strong>صوت ميكي ماوس الكرتوني</strong>
+                  <small>صوت كرتوني مرح وحيوي مع التأثيرات الأصلية</small>
+                </div>
+              </button>
+
+              <button type="button" class="voice-chip" id="chipVoiceCustom" onclick="selectVoiceMode('custom')">
+                <span class="chip-avatar">👩‍👧</span>
+                <div class="chip-content">
+                  <strong>صوت الوالدين (ماما / بابا)</strong>
+                  <small>تشغيل تسجيلك الصوتي المباشر عند بدء التطبيق</small>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Sliders for Pitch & Speed -->
+          <div class="voice-sliders-box">
+            <div class="slider-row">
+              <div class="slider-info">
+                <span>درجة حدة الصوت (Pitch):</span>
+                <span id="pitchValLabel" class="slider-badge">بنت لطيفة (1.35x)</span>
+              </div>
+              <input type="range" id="voicePitchSlider" min="0.8" max="1.8" step="0.05" value="1.35" oninput="updateVoiceSettings()">
+            </div>
+
+            <div class="slider-row">
+              <div class="slider-info">
+                <span>سرعة النطق (Speed):</span>
+                <span id="speedValLabel" class="slider-badge">هادئ ومريح (0.9x)</span>
+              </div>
+              <input type="range" id="voiceSpeedSlider" min="0.6" max="1.4" step="0.05" value="0.9" oninput="updateVoiceSettings()">
+            </div>
+
+            <div class="voice-test-actions">
+              <button type="button" class="btn-test-voice" onclick="testCurrentVoice()">
+                <span>🔊 استمع لتجربة الصوت الآن</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Parent Voice Recorder -->
+          <div class="recorder-section">
+            <h4 class="recorder-title">🎤 تسجيل صوتي مخصص بصوت الأهل (ماما أو بابا):</h4>
+            <p class="recorder-desc">سجّل رسالة قصيرة مشجعة لإياد مثل: <i>"مرحباً يا بطل إياد! أنا فخور بك جداً، هيا بنا نلعب ونتعلم!"</i> وستُقال له عند فتح التطبيق:</p>
+            
+            <div class="recorder-controls">
+              <button type="button" class="btn-record" id="btnRecordAudio" onclick="toggleParentAudioRecording()">
+                <span id="recordIcon">🔴</span>
+                <span id="recordText">بدء التسجيل الآن</span>
+              </button>
+              <button type="button" class="btn-play-recorded" id="btnPlayRecorded" onclick="playParentRecordedAudio()" style="display: none;">
+                <span>▶️ تشغيل التسجيل</span>
+              </button>
+              <button type="button" class="btn-delete-recorded" id="btnDeleteRecorded" onclick="deleteParentRecordedAudio()" style="display: none;">
+                <span>🗑️ حذف التسجيل</span>
+              </button>
+            </div>
+            <div id="recordingStatus" class="recording-status"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Photo & Avatar Management Card (تعديل وتخصيص الصور والشخصية) -->
+      <div class="parent-setting-card">
+        <div class="card-title-row">
+          <span class="card-icon">📸</span>
+          <div>
+            <h3>تعديل وتغيير صور وشخصية البطل إياد</h3>
+            <p>اختيار مظهر إياد الكرتوني المفضل أو رفع صورة جديدة من ألبوم هاتفك أو الكاميرا</p>
+          </div>
+        </div>
+
+        <div class="photo-config-box">
+          <!-- Current Avatar Preview & Upload -->
+          <div class="current-avatar-preview">
+            <div class="avatar-preview-wrap">
+              <img id="parentAvatarPreview" src="assets/images/ayad_waving.jpg" alt="معاينة صورة إياد">
+              <span class="avatar-badge">المظهر النشط ✨</span>
+            </div>
+            <div class="avatar-info-text">
+              <h4>صورة إياد المعتمدة في كامل التطبيق</h4>
+              <p>تظهر هذه الصورة في شاشة الترحيب الرئيسية، شريط الألعاب العلوي، وشاشة النوم الهادئ.</p>
+              
+              <div class="photo-action-buttons">
+                <label class="btn-upload-photo">
+                  <span>📁 رفع صورة جديدة من الهاتف / الكاميرا</span>
+                  <input type="file" id="parentPhotoUploadInput" accept="image/*" style="display: none;" onchange="handleParentPhotoUpload(event)">
+                </label>
+                <button type="button" class="btn-reset-photo" onclick="resetDefaultPhoto()">🔄 استعادة الصورة الافتراضية</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pre-designed Cartoon Gallery -->
+          <div class="preset-avatars-section">
+            <label class="setting-sub-label">أو اختر من الشخصيات الكرتونية الجاهزة:</label>
+            <div class="preset-avatars-grid">
+              <div class="preset-avatar-card active" id="presetAvatar1" onclick="selectPresetAvatar('assets/images/ayad_waving.jpg', 'presetAvatar1')">
+                <img src="assets/images/ayad_waving.jpg" alt="إياد يلوح">
+                <span>🌟 كرتون 3D يلوح</span>
+              </div>
+              <div class="preset-avatar-card" id="presetAvatar2" onclick="selectPresetAvatar('assets/images/ayad_thumbsup.jpg', 'presetAvatar2')">
+                <img src="assets/images/ayad_thumbsup.jpg" alt="إياد يشجع">
+                <span>👍 إشارة الإعجاب</span>
+              </div>
+              <div class="preset-avatar-card" id="presetAvatar3" onclick="selectPresetAvatar('assets/images/ayad_avatar.jpg', 'presetAvatar3')">
+                <img src="assets/images/ayad_avatar.jpg" alt="إياد الروضة">
+                <span>🎓 بزي الروضة</span>
+              </div>
+              <div class="preset-avatar-card" id="presetAvatar4" onclick="selectPresetAvatar('assets/images/ayad_photo.jpg', 'presetAvatar4')">
+                <img src="assets/images/ayad_photo.jpg" alt="صورة إياد الحقيقية">
+                <span>📸 الصورة الأصلية</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Ayad's Learning Progress & Activity -->
       <div class="parent-setting-card">
         <div class="card-title-row">

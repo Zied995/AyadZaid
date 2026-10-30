@@ -185,6 +185,9 @@ let bubbleSpawnTimer = null;
 // ==========================================================
 window.addEventListener('DOMContentLoaded', () => {
   loadStoredProfile();
+  loadSavedAvatar();
+  loadVoiceSettings();
+  loadSavedParentAudio();
   loadTimerSettings();
   createBgSparkles();
   renderArabicLetters();
@@ -302,25 +305,66 @@ function playWrongSound() {
   playAudioFile('wrong.wav');
 }
 
-// Web Speech API for Arabic and English Voice
+// Voice & Personality State
+let appVoiceMode = localStorage.getItem('ayad_voice_mode') || 'girl'; // 'girl' | 'mickey' | 'custom'
+let appVoicePitch = parseFloat(localStorage.getItem('ayad_voice_pitch') || '1.35');
+let appVoiceSpeed = parseFloat(localStorage.getItem('ayad_voice_speed') || '0.9');
+let parentRecordedAudioBase64 = localStorage.getItem('ayad_parent_recording') || null;
+
+// Web Speech API for Arabic and English Voice (Realistic Girl / Child-Friendly Voice)
 function speakText(text, lang = 'ar-SA') {
   if (!('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = lang;
-  utterance.rate = 0.9;
-  utterance.pitch = 1.25; // cheerful friendly tone for kids!
   
-  // Try to find native voice
+  if (appVoiceMode === 'girl') {
+    utterance.pitch = appVoicePitch || 1.35;
+    utterance.rate = appVoiceSpeed || 0.9;
+  } else if (appVoiceMode === 'mickey') {
+    utterance.pitch = 1.55;
+    utterance.rate = 1.02;
+  } else {
+    utterance.pitch = appVoicePitch || 1.25;
+    utterance.rate = appVoiceSpeed || 0.9;
+  }
+
+  // Find best natural female voice
   const voices = window.speechSynthesis.getVoices();
-  const targetVoice = voices.find(v => v.lang.startsWith(lang.substring(0, 2)));
-  if (targetVoice) utterance.voice = targetVoice;
+  const langPrefix = lang.substring(0, 2).toLowerCase();
   
+  // Priority: High-quality natural female voice
+  const femaleVoice = voices.find(v => 
+    v.lang.toLowerCase().startsWith(langPrefix) && 
+    /female|laila|zariyah|salma|miren|samantha|ava|siri|google|natural/i.test(v.name)
+  );
+
+  const langVoice = voices.find(v => v.lang.toLowerCase().startsWith(langPrefix));
+
+  if (femaleVoice) {
+    utterance.voice = femaleVoice;
+  } else if (langVoice) {
+    utterance.voice = langVoice;
+  }
+
   window.speechSynthesis.speak(utterance);
 }
 
 function speakMickeyGreeting() {
-  playAudioFile('mickey_welcome.mp3');
+  playSparkleSound();
+  
+  // If parent recorded custom audio and mode is custom, play parent voice!
+  if (appVoiceMode === 'custom' && parentRecordedAudioBase64) {
+    playParentRecordedAudio();
+    return;
+  }
+
+  // If Girl voice mode is selected, speak in friendly realistic girl voice!
+  if (appVoiceMode === 'girl') {
+    speakText(`مَرْحَباً بِكَ يَا إِيَادْ زَيْد! أَنَا صَدِيقَتُكَ، هَيَّا بِنَا نَلْعَبْ وَنَتَعَلَّمْ مَعاً يَا بَطَل!`, 'ar-SA');
+  } else {
+    playAudioFile('mickey_welcome.mp3');
+  }
 }
 
 // Background animated star particles
@@ -436,6 +480,287 @@ function saveParentProfileChanges() {
   alert('تم حفظ بيانات الحساب بنجاح! ⭐');
 }
 
+// ==========================================================
+// 7B. PARENTAL VOICE & PHOTO CUSTOMIZATION LOGIC
+// ==========================================================
+
+// 1. Voice Mode & Settings
+function selectVoiceMode(mode) {
+  playPopSound();
+  appVoiceMode = mode;
+  localStorage.setItem('ayad_voice_mode', mode);
+
+  document.querySelectorAll('.voice-chip').forEach(c => c.classList.remove('active'));
+  if (mode === 'girl') {
+    const el = document.getElementById('chipVoiceGirl');
+    if (el) el.classList.add('active');
+  } else if (mode === 'mickey') {
+    const el = document.getElementById('chipVoiceMickey');
+    if (el) el.classList.add('active');
+  } else if (mode === 'custom') {
+    const el = document.getElementById('chipVoiceCustom');
+    if (el) el.classList.add('active');
+  }
+
+  // Play test feedback immediately
+  testCurrentVoice();
+}
+
+function updateVoiceSettings() {
+  const pitchSlider = document.getElementById('voicePitchSlider');
+  const speedSlider = document.getElementById('voiceSpeedSlider');
+  const pitchLabel = document.getElementById('pitchValLabel');
+  const speedLabel = document.getElementById('speedValLabel');
+
+  if (pitchSlider) {
+    appVoicePitch = parseFloat(pitchSlider.value);
+    localStorage.setItem('ayad_voice_pitch', appVoicePitch);
+    if (pitchLabel) {
+      if (appVoicePitch >= 1.35) pitchLabel.textContent = `بنت لطيفة (${appVoicePitch.toFixed(2)}x)`;
+      else if (appVoicePitch >= 1.1) pitchLabel.textContent = `فتاة طبيعية (${appVoicePitch.toFixed(2)}x)`;
+      else pitchLabel.textContent = `صوت هادئ (${appVoicePitch.toFixed(2)}x)`;
+    }
+  }
+
+  if (speedSlider) {
+    appVoiceSpeed = parseFloat(speedSlider.value);
+    localStorage.setItem('ayad_voice_speed', appVoiceSpeed);
+    if (speedLabel) {
+      if (appVoiceSpeed <= 0.8) speedLabel.textContent = `بطيء جداً للأطفال (${appVoiceSpeed.toFixed(2)}x)`;
+      else if (appVoiceSpeed <= 0.95) speedLabel.textContent = `هادئ ومريح (${appVoiceSpeed.toFixed(2)}x)`;
+      else speedLabel.textContent = `طبيعي (${appVoiceSpeed.toFixed(2)}x)`;
+    }
+  }
+}
+
+function testCurrentVoice() {
+  if (appVoiceMode === 'custom' && parentRecordedAudioBase64) {
+    playParentRecordedAudio();
+    return;
+  }
+  
+  if (appVoiceMode === 'mickey') {
+    playAudioFile('mickey_welcome.mp3');
+    return;
+  }
+
+  // Realistic Girl Voice
+  speakText(`مرحباً بك يا إياد زيد! أنا صديقتك، كيف حالك اليوم يا بطل؟`, 'ar-SA');
+}
+
+function loadVoiceSettings() {
+  const mode = localStorage.getItem('ayad_voice_mode') || 'girl';
+  appVoiceMode = mode;
+  document.querySelectorAll('.voice-chip').forEach(c => c.classList.remove('active'));
+  if (mode === 'girl') {
+    const el = document.getElementById('chipVoiceGirl');
+    if (el) el.classList.add('active');
+  } else if (mode === 'mickey') {
+    const el = document.getElementById('chipVoiceMickey');
+    if (el) el.classList.add('active');
+  } else if (mode === 'custom') {
+    const el = document.getElementById('chipVoiceCustom');
+    if (el) el.classList.add('active');
+  }
+
+  const pitch = localStorage.getItem('ayad_voice_pitch');
+  if (pitch) {
+    appVoicePitch = parseFloat(pitch);
+    const slider = document.getElementById('voicePitchSlider');
+    if (slider) slider.value = appVoicePitch;
+  }
+
+  const speed = localStorage.getItem('ayad_voice_speed');
+  if (speed) {
+    appVoiceSpeed = parseFloat(speed);
+    const slider = document.getElementById('voiceSpeedSlider');
+    if (slider) slider.value = appVoiceSpeed;
+  }
+
+  updateVoiceSettings();
+}
+
+// 2. Parent Voice Recording (تسجيل صوت مخصص من الأهل)
+let mediaRecorder = null;
+let audioChunks = [];
+let isRecording = false;
+
+async function toggleParentAudioRecording() {
+  const btn = document.getElementById('btnRecordAudio');
+  const icon = document.getElementById('recordIcon');
+  const text = document.getElementById('recordText');
+  const status = document.getElementById('recordingStatus');
+
+  if (!isRecording) {
+    // Start Recording
+    try {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert('تسجيل الصوت غير مدعوم في هذا المتصفح أو يحتاج اتصال آمن HTTPS.');
+        return;
+      }
+
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioChunks = [];
+      mediaRecorder = new MediaRecorder(stream);
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) audioChunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          parentRecordedAudioBase64 = reader.result;
+          try {
+            localStorage.setItem('ayad_parent_recording', parentRecordedAudioBase64);
+          } catch (e) {}
+          updateRecorderUI(true);
+          if (status) {
+            status.innerHTML = `<span style="color: #2E7D32;">✅ تم حفظ تسجيلك بنجاح! سيتم تشغيله لإياد عند فتح التطبيق.</span>`;
+          }
+          playCheerSound();
+        };
+        reader.readAsDataURL(audioBlob);
+
+        stream.getTracks().forEach(track => track.stop());
+      };
+
+      mediaRecorder.start();
+      isRecording = true;
+      if (btn) btn.classList.add('recording');
+      if (icon) icon.textContent = '⏹️';
+      if (text) text.textContent = 'إيقاف وحفظ التسجيل';
+      if (status) status.textContent = 'جاري التسجيل الآن... تحدث بصوت واضح ومحبب لإياد 🎙️';
+    } catch (err) {
+      alert('يرجى السماح للتطبيق بالوصول إلى الميكروفون لتسجيل الصوت.');
+    }
+  } else {
+    // Stop Recording
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+      mediaRecorder.stop();
+    }
+    isRecording = false;
+    if (btn) btn.classList.remove('recording');
+    if (icon) icon.textContent = '🔴';
+    if (text) text.textContent = 'تسجيل صوت جديد';
+  }
+}
+
+function playParentRecordedAudio() {
+  if (!parentRecordedAudioBase64) return;
+  try {
+    const audio = new Audio(parentRecordedAudioBase64);
+    audio.play();
+  } catch (e) {}
+}
+
+function deleteParentRecordedAudio() {
+  if (!confirm('هل أنت متأكد من حذف التسجيل الصوتي للأهل؟')) return;
+  parentRecordedAudioBase64 = null;
+  localStorage.removeItem('ayad_parent_recording');
+  updateRecorderUI(false);
+  const status = document.getElementById('recordingStatus');
+  if (status) status.innerHTML = `<span style="color: #666;">تم حذف التسجيل الصوتي.</span>`;
+}
+
+function updateRecorderUI(hasRecording) {
+  const btnPlay = document.getElementById('btnPlayRecorded');
+  const btnDel = document.getElementById('btnDeleteRecorded');
+  if (btnPlay) btnPlay.style.display = hasRecording ? 'inline-flex' : 'none';
+  if (btnDel) btnDel.style.display = hasRecording ? 'inline-flex' : 'none';
+}
+
+function loadSavedParentAudio() {
+  parentRecordedAudioBase64 = localStorage.getItem('ayad_parent_recording');
+  updateRecorderUI(!!parentRecordedAudioBase64);
+}
+
+// 3. Photo & Character Customization (تعديل وتغيير صور إياد)
+function applyAppAvatar(imgUrl) {
+  if (!imgUrl) return;
+
+  const heroImg = document.getElementById('heroAvatarImg');
+  if (heroImg) heroImg.src = imgUrl;
+
+  document.querySelectorAll('.user-avatar-sm, .banner-hero-img, .sleep-hero-avatar').forEach(img => {
+    img.src = imgUrl;
+  });
+
+  const preview = document.getElementById('parentAvatarPreview');
+  if (preview) preview.src = imgUrl;
+
+  try {
+    localStorage.setItem('ayad_custom_avatar', imgUrl);
+  } catch (e) {}
+}
+
+function selectPresetAvatar(imgUrl, cardId) {
+  playPopSound();
+  document.querySelectorAll('.preset-avatar-card').forEach(c => c.classList.remove('active'));
+  const card = document.getElementById(cardId);
+  if (card) card.classList.add('active');
+
+  applyAppAvatar(imgUrl);
+  playSparkleSound();
+}
+
+function handleParentPhotoUpload(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  playSparkleSound();
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    // Compress image via offscreen canvas to optimize mobile storage
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const maxDim = 450;
+      let width = img.width;
+      let height = img.height;
+
+      if (width > height) {
+        if (width > maxDim) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        }
+      } else {
+        if (height > maxDim) {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+
+      const optimizedUrl = canvas.toDataURL('image/jpeg', 0.85);
+      applyAppAvatar(optimizedUrl);
+
+      document.querySelectorAll('.preset-avatar-card').forEach(c => c.classList.remove('active'));
+      playCheerSound();
+      alert('🎉 رائع! تم تحديث صورة إياد بنجاح في كامل أقسام التطبيق!');
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function resetDefaultPhoto() {
+  selectPresetAvatar('assets/images/ayad_waving.jpg', 'presetAvatar1');
+  alert('تمت استعادة صورة إياد الكرتونية الافتراضية.');
+}
+
+function loadSavedAvatar() {
+  const saved = localStorage.getItem('ayad_custom_avatar');
+  if (saved) {
+    applyAppAvatar(saved);
+  }
+}
+
 function addKidStars(amount = 1) {
   kidProfile.stars += amount;
   try {
@@ -517,7 +842,13 @@ function getRainbowColor(idx) {
 
 function speakMathNumber(num, word, itemWord = '') {
   playPopSound();
-  playAudioFile(`ar_num_${num}.mp3`);
+  if (appVoiceMode === 'girl') {
+    let text = `${word}`;
+    if (itemWord) text += `، ${itemWord}`;
+    speakText(text, 'ar-SA');
+  } else {
+    playAudioFile(`ar_num_${num}.mp3`);
+  }
 }
 
 function switchMathTab(tabId) {
@@ -567,13 +898,21 @@ function checkCountAnswer(selected) {
   if (selected === currentCountAnswer) {
     feedback.innerHTML = `<span style="color: #2E7D32;">🎉 رَائِـع يَا إِيَادْ! إِجَابَةٌ صَحِيحَة! (+1 ⭐)</span>`;
     playCheerSound();
-    playAudioFile('mickey_correct.mp3');
+    if (appVoiceMode === 'girl') {
+      speakText(`أحسنت يا بطل إياد! إجابة صحيحة، ${selected}!`, 'ar-SA');
+    } else {
+      playAudioFile('mickey_correct.mp3');
+    }
     addKidStars(1);
     setTimeout(startMathCountingGame, 2000);
   } else {
     feedback.innerHTML = `<span style="color: #D32F2F;">حَاوِلْ مَرَّةً أُخْرَى يَا بَطَل! عُدَّ بِهُدُوء 🎈</span>`;
     playPopSound();
-    playAudioFile('mickey_try.mp3');
+    if (appVoiceMode === 'girl') {
+      speakText('حاول مرة أخرى يا إياد، عد الأشكال بهدوء!', 'ar-SA');
+    } else {
+      playAudioFile('mickey_try.mp3');
+    }
   }
 }
 
@@ -617,13 +956,21 @@ function checkAdditionAnswer(selected) {
   if (selected === currentAdditionAnswer) {
     feedback.innerHTML = `<span style="color: #2E7D32;">🌟 عَبْقَرِي يَا إِيَادْ! ${selected} هُوَ النَّاتِج! (+2 ⭐)</span>`;
     playCheerSound();
-    playAudioFile('mickey_correct.mp3');
+    if (appVoiceMode === 'girl') {
+      speakText(`عبقري يا إياد! ناتج الجمع هو ${selected}! أحسنت!`, 'ar-SA');
+    } else {
+      playAudioFile('mickey_correct.mp3');
+    }
     addKidStars(2);
     setTimeout(startMathAdditionGame, 2200);
   } else {
     feedback.innerHTML = `<span style="color: #D32F2F;">ركّز يا ذكي، اجمع التفاحات معاً 🍎</span>`;
     playPopSound();
-    playAudioFile('mickey_try.mp3');
+    if (appVoiceMode === 'girl') {
+      speakText('ركز يا بطل، اجمع الأرقام معاً!', 'ar-SA');
+    } else {
+      playAudioFile('mickey_try.mp3');
+    }
   }
 }
 
@@ -717,11 +1064,17 @@ function toggleLetterAlt() {
 
 function pronounceCurrentArabicLetter() {
   if (!currentArabicLetter) return;
+  const word = currentArabicAlt ? currentArabicLetter.plantWord : currentArabicLetter.animalWord;
   const index = ARABIC_ALPHABET.findIndex(item => item.char === currentArabicLetter.char);
-  if (index >= 0) {
-    playAudioFile(`ar_letter_${index}.mp3`);
+
+  if (appVoiceMode === 'girl') {
+    speakText(`حرف ${currentArabicLetter.name}، ${word}`, 'ar-SA');
   } else {
-    speakText(`حرف ${currentArabicLetter.name}`, 'ar-SA');
+    if (index >= 0) {
+      playAudioFile(`ar_letter_${index}.mp3`);
+    } else {
+      speakText(`حرف ${currentArabicLetter.name}، ${word}`, 'ar-SA');
+    }
   }
 }
 
@@ -939,13 +1292,21 @@ function renderEnglishCards() {
 
 function speakEnglishLetter(letter, word, phonics) {
   playPopSound();
-  const lower = letter.toLowerCase();
-  playAudioFile(`en_letter_${lower}.mp3`);
+  if (appVoiceMode === 'girl') {
+    speakText(`${letter}, ${word}`, 'en-US');
+  } else {
+    const lower = letter.toLowerCase();
+    playAudioFile(`en_letter_${lower}.mp3`);
+  }
 }
 
 function speakEnglishNumber(num) {
   playPopSound();
-  playAudioFile(`en_num_${num}.mp3`);
+  if (appVoiceMode === 'girl') {
+    speakText(`Number ${num}`, 'en-US');
+  } else {
+    playAudioFile(`en_num_${num}.mp3`);
+  }
 }
 
 function switchEnglishTab(tabId) {
@@ -1047,9 +1408,17 @@ function popBubble(bubbleEl, speech, type, val) {
   if (scoreEl) scoreEl.textContent = bubbleScore;
 
   if (type === 'letter') {
-    playAudioFile(`en_letter_${val.toLowerCase()}.mp3`);
+    if (appVoiceMode === 'girl') {
+      speakText(`${val}`, 'en-US');
+    } else {
+      playAudioFile(`en_letter_${val.toLowerCase()}.mp3`);
+    }
   } else if (type === 'number') {
-    playAudioFile(`en_num_${val}.mp3`);
+    if (appVoiceMode === 'girl') {
+      speakText(`${val}`, 'en-US');
+    } else {
+      playAudioFile(`en_num_${val}.mp3`);
+    }
   } else {
     playSparkleSound();
   }
