@@ -320,8 +320,7 @@ function speakText(text, lang = 'ar-SA') {
 }
 
 function speakMickeyGreeting() {
-  playSparkleSound();
-  speakText(`مَرْحَباً بِكَ يَا إِيَادْ زَيْد! أَنَا صَدِيقُكَ مِيكِي مَاوْسْ. هَيَّا بِنَا نَلْعَبْ وَنَتَعَلَّمْ مَعاً يَا بَطَل!`, 'ar-SA');
+  playAudioFile('mickey_welcome.mp3');
 }
 
 // Background animated star particles
@@ -518,9 +517,7 @@ function getRainbowColor(idx) {
 
 function speakMathNumber(num, word, itemWord = '') {
   playPopSound();
-  let text = `${num}، ${word}`;
-  if (itemWord) text += `، ${itemWord}`;
-  speakText(text, 'ar-SA');
+  playAudioFile(`ar_num_${num}.mp3`);
 }
 
 function switchMathTab(tabId) {
@@ -570,13 +567,13 @@ function checkCountAnswer(selected) {
   if (selected === currentCountAnswer) {
     feedback.innerHTML = `<span style="color: #2E7D32;">🎉 رَائِـع يَا إِيَادْ! إِجَابَةٌ صَحِيحَة! (+1 ⭐)</span>`;
     playCheerSound();
-    speakText(`أحسنت يا بطل إياد! الإجابة صحيحة، ${selected}!`, 'ar-SA');
+    playAudioFile('mickey_correct.mp3');
     addKidStars(1);
     setTimeout(startMathCountingGame, 2000);
   } else {
     feedback.innerHTML = `<span style="color: #D32F2F;">حَاوِلْ مَرَّةً أُخْرَى يَا بَطَل! عُدَّ بِهُدُوء 🎈</span>`;
     playPopSound();
-    speakText('حاول مرة أخرى يا إياد، عد الأشكال بهدوء!', 'ar-SA');
+    playAudioFile('mickey_try.mp3');
   }
 }
 
@@ -620,12 +617,13 @@ function checkAdditionAnswer(selected) {
   if (selected === currentAdditionAnswer) {
     feedback.innerHTML = `<span style="color: #2E7D32;">🌟 عَبْقَرِي يَا إِيَادْ! ${selected} هُوَ النَّاتِج! (+2 ⭐)</span>`;
     playCheerSound();
-    speakText(`عبقري يا إياد! ناتج الجمع هو ${selected}! أحسنت!`, 'ar-SA');
+    playAudioFile('mickey_correct.mp3');
     addKidStars(2);
     setTimeout(startMathAdditionGame, 2200);
   } else {
     feedback.innerHTML = `<span style="color: #D32F2F;">ركّز يا ذكي، اجمع التفاحات معاً 🍎</span>`;
     playPopSound();
+    playAudioFile('mickey_try.mp3');
   }
 }
 
@@ -719,9 +717,12 @@ function toggleLetterAlt() {
 
 function pronounceCurrentArabicLetter() {
   if (!currentArabicLetter) return;
-  const word = currentArabicAlt ? currentArabicLetter.plantWord : currentArabicLetter.animalWord;
-  const phrase = `حَرْفُ ${currentArabicLetter.name}، ${word}`;
-  speakText(phrase, 'ar-SA');
+  const index = ARABIC_ALPHABET.findIndex(item => item.char === currentArabicLetter.char);
+  if (index >= 0) {
+    playAudioFile(`ar_letter_${index}.mp3`);
+  } else {
+    speakText(`حرف ${currentArabicLetter.name}`, 'ar-SA');
+  }
 }
 
 function closeLetterModal(e) {
@@ -938,12 +939,13 @@ function renderEnglishCards() {
 
 function speakEnglishLetter(letter, word, phonics) {
   playPopSound();
-  speakText(phonics, 'en-US');
+  const lower = letter.toLowerCase();
+  playAudioFile(`en_letter_${lower}.mp3`);
 }
 
 function speakEnglishNumber(num) {
   playPopSound();
-  speakText(`${num}`, 'en-US');
+  playAudioFile(`en_num_${num}.mp3`);
 }
 
 function switchEnglishTab(tabId) {
@@ -1027,7 +1029,7 @@ function spawnOneBubble(initial = false) {
   // On Tap / Click: POP!
   bubble.addEventListener('pointerdown', (e) => {
     e.stopPropagation();
-    popBubble(bubble, speech);
+    popBubble(bubble, speech, type, label);
   });
 
   arena.appendChild(bubble);
@@ -1038,14 +1040,19 @@ function spawnOneBubble(initial = false) {
   }, 9000);
 }
 
-function popBubble(bubbleEl, speech) {
+function popBubble(bubbleEl, speech, type, val) {
   playPopSound();
   bubbleScore += 10;
   const scoreEl = document.getElementById('bubbleScore');
   if (scoreEl) scoreEl.textContent = bubbleScore;
 
-  // Speak character in English
-  speakText(speech, 'en-US');
+  if (type === 'letter') {
+    playAudioFile(`en_letter_${val.toLowerCase()}.mp3`);
+  } else if (type === 'number') {
+    playAudioFile(`en_num_${val}.mp3`);
+  } else {
+    playSparkleSound();
+  }
 
   // Trigger explode animation
   bubbleEl.style.animation = 'popExplode 0.25s forwards';
